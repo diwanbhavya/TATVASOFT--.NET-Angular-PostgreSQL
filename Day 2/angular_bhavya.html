@@ -1,0 +1,77 @@
+<!-- Enhanced Form Version 2 -->
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title>AngularJS Enhanced Form 2</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body ng-controller="FormController">
+
+  <h2>Enhanced Form 2</h2>
+
+  <form ng-submit="submitForm()" name="userForm" novalidate>
+    <label>Name:</label>
+    <input type="text" ng-model="user.name" required>
+    <br><br>
+
+    <label>Email ID:</label>
+    <input type="email" ng-model="user.email" required>
+    <br><br>
+
+    <label>Gender:</label>
+    <select ng-model="user.gender" required>
+      <option value="" disabled selected>Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+    <br><br>
+
+    <label>Address:</label>
+    <textarea ng-model="user.address" required></textarea>
+    <br><br>
+
+    <button type="submit" ng-disabled="userForm.$invalid">Submit</button>
+  </form>
+
+  <h3>Submitted Users</h3>
+  <table ng-if="users.length > 0">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Gender</th>
+      <th>Address</th>
+    </tr>
+    <tr ng-repeat="u in users">
+      <td>{{u.name}}</td>
+      <td>{{u.email}}</td>
+      <td>{{u.gender}}</td>
+      <td>{{u.address}}</td>
+    </tr>
+  </table>
+  <p ng-if="users.length === 0">No users submitted yet.</p>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('FormController', function($scope) {
+      $scope.user = { name: '', email: '', gender: '', address: '' };
+      $scope.users = [];
+
+      $scope.submitForm = function() {
+        if ($scope.userForm.$valid) {
+          $scope.users.push(angular.copy($scope.user));
+          $scope.user = { name: '', email: '', gender: '', address: '' };
+          $scope.userForm.$setPristine();
+          $scope.userForm.$setUntouched();
+        }
+      };
+    });
+  </script>
+
+</body>
+</html>
